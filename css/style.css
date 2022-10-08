@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Bangers', cursive;
 }
 
 body {
@@ -18,6 +21,6 @@ body {
     max-height: 100%;
 }
 
-#layer1, #layer2, #layer3, #layer4, #player, #angler1, #angler2, #lucky {
+#layer1, #layer2, #layer3, #layer4, #player, #angler1, #angler2, #lucky, #projectile {
     display: none;
 }

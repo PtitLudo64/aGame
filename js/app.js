@@ -43,14 +43,16 @@ window.addEventListener('load', () => {
             this.height = 3;
             this.speed = 5;
             this.markedForDeletion = false;
+            this.image = document.querySelector('#projectile');
         }
         update() {
             this.x += this.speed;
             if (this.x > this.game.width * 0.8) this.markedForDeletion = true;
         }
         draw(context) {
-            context.fillStyle='#ff0';
-            context.fillRect(this.x, this.y, this.width, this.height);
+            // context.fillStyle='#ff0';
+            // context.fillRect(this.x, this.y, this.width, this.height);
+            context.drawImage(this.image, this.x, this.y);
         }
     }
     class Particle {
@@ -82,6 +84,8 @@ window.addEventListener('load', () => {
             else if (this.game.keys.includes('ArrowDown')) this.speedY = this.maxSpeed;
             else this.speedY = 0;
             this.y += this.speedY;
+            // Limites verticales
+            
             //Animation
             this.frameX++;
             if (this.frameX>this.maxFrame) {
@@ -111,15 +115,21 @@ window.addEventListener('load', () => {
                 context.strokeStyle='#0f0';
                 context.strokeRect(this.x, this.y, this.width, this.height);
             }
-            context.drawImage(this.image, this.frameX * this.width, this.frameY*this.height, this.width, this.height, this.x, this.y, this.width, this.height);
             this.projectiles.forEach(projectile => {
                 projectile.draw(context);
-            });
+            });            
+            context.drawImage(this.image, this.frameX * this.width, this.frameY*this.height, this.width, this.height, this.x, this.y, this.width, this.height);
         }
         shootTop() {
             if (this.game.ammo > 0) {
                 this.projectiles.push(new Projectile(this.game, this.x + 95, this.y + 30));
                 this.game.ammo--;
+            }
+            if (this.powerUp) this.shootBottom();
+        }
+        shootBottom() {
+            if (this.game.ammo > 0) {
+                this.projectiles.push(new Projectile(this.game, this.x + 95, this.y + 175));
             }
         }
         enterPowerUp() {
@@ -152,11 +162,11 @@ window.addEventListener('load', () => {
             if (this.game.debug) {
                 context.strokeStyle='#f00';
                 context.strokeRect(this.x, this.y, this.width, this.height);
+                context.fillStyle='#000';
+                context.font = '20px arial';
+                context.fillText(this.lives, this.x, this.y);                
             }
             context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
-            context.fillStyle='#000';
-            context.font = '20px arial';
-            context.fillText(this.lives, this.x, this.y);
         }
     }
     class Angler1 extends Enemy {
@@ -240,7 +250,7 @@ window.addEventListener('load', () => {
         constructor(game) {
             this.game = game;
             this.fontSize = 30;
-            this.fontFamily = 'Dyuthi';
+            this.fontFamily = 'Bangers';
             this.color = '#fff';
         }
         draw(context) {
@@ -252,10 +262,6 @@ window.addEventListener('load', () => {
             context.shadowOffsetY = 2;
             context.shadowColor = '#000';
             context.fillText('Score: ' + this.game.score, this.game.width / 2, 30);
-            //ammo
-            for(let i=0; i<this.game.ammo; i++) {
-                context.fillRect(20+(5*i), 10, 3, 20);
-            }
             //timer
             const formatedTimer = (this.game.gameTime * 0.001).toFixed(1);
             context.fillText('Timer: ' + formatedTimer, this.game.width - this.game.width / 4, 30);
@@ -279,6 +285,11 @@ window.addEventListener('load', () => {
                 context.shadowColor = '#000';
                 context.fillText(message1, this.game.width/2, this.game.height / 2 - 25);
                 context.fillText(message2, this.game.width/2, this.game.height / 2 + 25);
+            }
+            //ammo
+            if(this.game.player.powerUp) context.fillStyle = "#99F";
+            for(let i=0; i<this.game.ammo; i++) {
+                context.fillRect(20+(5*i), 10, 3, 20);
             }
             context.restore();
         }
