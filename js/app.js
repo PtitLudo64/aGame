@@ -40,7 +40,8 @@ window.addEventListener('load', () => {
             else this.speedY = 0;
             this.y += this.speedY;
             // Limites verticales
-
+            if(this.y > this.game.height - this.height * 0.5) this.y = this.game.height - this.height * 0.5;
+            else if(this.y < 0 - this.height * 0.5) this.y = 0 - this.height * 0.5; 
             //Animation
             this.frameX++;
             if (this.frameX>this.maxFrame) {
