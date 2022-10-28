@@ -33,7 +33,7 @@ window.addEventListener('load', () => {
         update() {
             this.angle += this.va;
             this.speedY += this.gravity;
-            this.x -= this.speedX;
+            this.x -= this.speedX + this.game.speed;
             this.y += this.speedY;
             if(this.y > this.game.height + this.size || this.x < 0 - this.size) this.markedForDeletion = true;
             if(this.y > this.game.height - this.bottomBounceBoundary && this.bounced < 2) {
@@ -45,8 +45,7 @@ window.addEventListener('load', () => {
             context.save();
             context.translate(this.x, this.y);
             context.rotate(this.angle);
-            context.drawImage(this.image, this.frameX * this.spriteSize, this.frameY * this.spriteSize, this.spriteSize, this.spriteSize, 0, 0, this.size, this.size);
-
+            context.drawImage(this.image, this.frameX * this.spriteSize, this.frameY * this.spriteSize, this.spriteSize, this.spriteSize, this.size * -0.5, this.size * -0.5, this.size, this.size);
             context.restore();
         }
     }
@@ -126,7 +125,10 @@ window.addEventListener('load', () => {
         enterPowerUp() {
             this.powerUpTimer = 0;
             this.powerUp = true;
-            this.game.ammo = this.game.maxAmmo;
+            console.log(this.game.ammo);
+            console.log(this.game.maxAmmo);
+            if(this.game.ammo < this.game.maxAmmo)
+                this.game.ammo = this.game.maxAmmo;
         }
     }
 
@@ -198,7 +200,7 @@ window.addEventListener('load', () => {
             this.ammoInterval = 500;
             this.gameOver = false;
             this.score = 0;
-            this.winnigScore = 25;
+            this.winnigScore = 55;
             this.gameTime = 0;
             this.gameTimeLimit = 25000;
             this.speed = 1;
